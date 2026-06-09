@@ -9,21 +9,21 @@ phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR
-      - 278396816876=$(aws sts get-caller-identity --query Account --output text)
-      - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 278396816876.dkr.ecr.us-east-2.amazonaws.com
+      - $278396816876=$(aws sts get-caller-identity --query Account --output text)
+      - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin $278396816876.dkr.ecr.us-east-2.amazonaws.com
       - IMAGE_TAG=$CODEBUILD_BUILD_NUMBER
 
   build:
     commands:
       - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
-      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG 278396816876.dkr.ecr.us-east-2.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
-      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG 278396816876.dkr.ecr.us-east-2.amazonaws.com/$IMAGE_REPO_NAME:latest
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $278396816876.dkr.ecr.us-east-2.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $278396816876.dkr.ecr.us-east-2.amazonaws.com/$IMAGE_REPO_NAME:latest
 
   post_build:
     commands:
-      - docker push 278396816876.dkr.ecr.us-east-2.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
-      - docker push 278396816876.dkr.ecr.us-east-2.amazonaws.com/$IMAGE_REPO_NAME:latest
-      - printf '[{"name":"hiqode-app","imageUri":"%s"}]' 278396816876.dkr.ecr.us-east-2.amazonaws.com/$IMAGE_REPO_NAME:latest > imagedefinitions.json
+      - docker push $278396816876.dkr.ecr.us-east-2.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - docker push $278396816876.dkr.ecr.us-east-2.amazonaws.com/$IMAGE_REPO_NAME:latest
+      - printf '[{"name":"hiqode-app","imageUri":"%s"}]' $278396816876.dkr.ecr.us-east-2.amazonaws.com/$IMAGE_REPO_NAME:latest > imagedefinitions.json
 
 artifacts:
   files:
